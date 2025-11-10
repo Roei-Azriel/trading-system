@@ -1,19 +1,26 @@
-import type { CreateUserDTO, UserPublicDTO } from "./user.types.js";
+import type { CreateUserDTO, UserPublicDTO , DeleteUserDTO } from "./user.types.js";
+import bcrypt from "bcryptjs";
 
 
 export class UserService { //Create new class for the user Service
 
-  async createUser(dto: CreateUserDTO): Promise<UserPublicDTO> { //create user accept one input  call dto and is createUserDTO object
+  private async hashPassword(password:string):Promise<string>{
+    const salt = await bcrypt.genSalt(10) //salt 
+    return bcrypt.hash(password,salt);
+  }
 
-    // כאן בעתיד יהיו: בדיקות ייחודיות, hash לסיסמה, קריאה ל-Repo וכו'.
-    // לעכשיו—נחזיר אובייקט ציבורי "כאילו" יצרנו משתמש.
+  private async comparePasswords(plain:string , hashed:string): Promise<boolean>{
+    return bcrypt.compare(plain,hashed);
+  }
+
+  async createUser(dto: CreateUserDTO): Promise<UserPublicDTO> { //create user accept one input  call dto and is createUserDTO object
 
     const now = new Date();
 
     const user: UserPublicDTO = {
-      id: crypto.randomUUID(),     // מזהה זמני
+      id: crypto.randomUUID(),     
       fullName: dto.fullName,
-      idNumber: dto.idNumber,      // אם לא רוצים לחשוף—תסיר מ-UserPublicDTO
+      idNumber: dto.idNumber,      
       country: dto.country,
       email: dto.email,
       username: dto.username,
@@ -22,4 +29,10 @@ export class UserService { //Create new class for the user Service
 
     return user;
   }
+
+
+async deleteUser(dto:DeleteUserDTO): Promise<{id:string}>{
+
+  return {id:'1213'};
+}
 }
