@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    // בנייה נקייה ל-dist
+    "rootDir": "src",
+    "outDir": "dist",
+
+    // סביבת Node עם ESM מודרני
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2020",
+    "lib": ["ES2020"],
+
+    // טיפוסים ותאימות עם חבילות CJS
+    "types": ["node"],
+    "esModuleInterop": true,
+
+    // מפות מקור (לבחירה)
+    "sourceMap": true,
+
+    // אפשר לכבות אם אין לך צורך בקבצי הצהרות
+    "declaration": false,
+    "declarationMap": false,
+
+    // קשיחות
+    "strict": true,
+    "skipLibCheck": true,
+
+    // אופציות שאינן רלוונטיות ל-backend – להסיר
+    // "jsx": "react-jsx",
+
+    // אם אתה נשאר עם ESM מלא ותעדיף אכיפה של סיומות – תשאיר true
+    "verbatimModuleSyntax": true,
+
+    // לא חובה, אבל בסדר להשאיר
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "moduleDetection": "force",
+    "isolatedModules": true
+  },
+  "include": ["src"]
+}
