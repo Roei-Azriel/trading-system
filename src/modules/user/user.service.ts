@@ -31,6 +31,7 @@ export class UserService { //Create new class for the user Service
   }
 
 
+  
 async deleteUser(dto:DeleteUserDTO): Promise<{id:string}>{
 
   return {id:'1213'};

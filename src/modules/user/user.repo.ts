@@ -15,6 +15,4 @@ export interface UserRepo{
     findByEmail(email:string):Promise <UserRecord | null>;
     findByUsername(username:string):Promise<UserRecord | null>;
     create(data: Omit<UserRecord ,'id' | "createAt">): Promise<UserRecord>;
-
-
 }
