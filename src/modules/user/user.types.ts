@@ -14,10 +14,15 @@ export const deleteUserSchema = z.object({
   password:z.string().min(6)
 })
 
+export const passwordSchema = z.object({
+  id: z.string(),
+  currentPassword:z.string(),
+  Newpassword:z.string().min(6)
+})
+
 export type DeleteUserDTO = z.infer<typeof deleteUserSchema>;
-
 export type CreateUserDTO = z.infer<typeof createUserSchema>;
-
+export type NewPasswordDTO = z.infer<typeof passwordSchema>;
 
 export type UserPublicDTO = {
   id: string;
@@ -26,5 +31,4 @@ export type UserPublicDTO = {
   country: string;
   email: string;
   username: string;
-  createdAt: Date;
 };
