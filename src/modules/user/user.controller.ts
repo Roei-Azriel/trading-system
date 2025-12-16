@@ -1,13 +1,6 @@
-/**
- * Controllers receive (req,res), validate input, and pass DTOs to services.
- * For now they are stubs so you can implement them yourself.
- */
 import type { Request, Response } from "express";
-import { type CreateUserDTO, createUserSchema, type DeleteUserDTO ,deleteUserSchema} from "./user.types.js";
-import { UserService } from "./user.service.js";
-
-
-const userService = new UserService(); //class for the business level
+import { type CreateUserDTO, createUserSchema, type DeleteUserDTO ,deleteUserSchema , type NewPasswordDTO , passwordSchema } from "./user.types.js";
+import { userService } from "./user.service.js";
 
 
 export async function createUser(req: Request, res: Response) {
@@ -30,8 +23,6 @@ export async function createUser(req: Request, res: Response) {
     return res.status(500).json({message:'server error'})
   }
 }
-
-
 
 
 export async function deleteUser(req: Request<{id:string}, {} , {password:string}>, res: Response) {
@@ -61,7 +52,22 @@ export async function deleteUser(req: Request<{id:string}, {} , {password:string
 
 
 
-export async function changePassword(req: Request, res: Response) {
-  // TODO: validate req.params.id and req.body (oldPassword,newPassword), then call service
-  return res.status(501).json({ todo: "implement changePassword" });
+export async function changePassword(req: Request, res: Response) { // req = {id , currentPassword , Newpassword}
+   const passwords = passwordSchema.safeParse(req.body);
+
+  if(!passwords.success){
+    return res.status(400).json({
+      message:'Invalid password input'
+    })
+   }
+   const userPasswords : NewPasswordDTO = passwords.data;
+
+   try{
+    const result = await userService.changePassword(userPasswords); //return message if implement change password success
+    return res.status(200).json(result);
+   }catch(e){
+    return res.status(400).json({message:'Password change failed'})
+   }
 }
+
+
