@@ -4,6 +4,8 @@ import helmet from "helmet";
 import dotenv from "dotenv";
 import userRoutes from "./modules/user/user.routes.js";
 import walletRoutes from "./modules/wallet/wallet.routes.js";
+import orderRoutes from './modules/order/order.routes.js';
+
 
 dotenv.config(); 
 
@@ -21,6 +23,7 @@ app.use(express.json());
 
 app.use("/users", userRoutes);
 app.use("/wallets", walletRoutes);
+app.use("/order",);
 
 app.get("/healthz", (_req, res) => res.json({ ok: true }));
 

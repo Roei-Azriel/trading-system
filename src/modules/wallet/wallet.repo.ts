@@ -38,14 +38,14 @@ async credit(walletId:string,currency:string, amount:number) : Promise<CoinRecor
       },
         },
         update:{
-            amount:{
+            available:{
                 increment:amount
             }
         },
         create:{
             walletId,
             currency,
-            amount,
+            available : amount,
         }
     })
 }
@@ -64,7 +64,7 @@ async debit(walletId:string,currency:string, amount:number) : Promise<CoinRecord
         throw new BalanceNotFoundError(walletId);
     }
 
-    if (balance.amount.lt(amount)){ 
+    if (balance.available.lt(amount)){ 
         throw new InsufficientFundsError(); 
     }
     const updated = await tx.walletBalance.update({
@@ -75,7 +75,7 @@ async debit(walletId:string,currency:string, amount:number) : Promise<CoinRecord
                  }, }, 
                  
         data: {
-            amount: {
+            available: {
                 decrement: amount, 
             },
          },

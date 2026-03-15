@@ -31,10 +31,12 @@ export type WalletRecord = {
 };
 
 export type CoinRecord = {
-  walletId:string,
-  currency : string,
-  amount : Prisma.Decimal,
-}
+  id: string;
+  walletId: string;
+  currency: string;
+  available: Prisma.Decimal;
+  locked: Prisma.Decimal;
+};
 
 
 export type balanceDTO = z.infer<typeof balanceSchema>;

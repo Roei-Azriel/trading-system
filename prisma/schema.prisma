@@ -17,6 +17,7 @@ model User {
   passwordHash  String   
   createdAt   DateTime    @default(now())
   wallet      Wallet?
+  orders         Order[]
 }
 
 model Wallet{
@@ -30,13 +31,81 @@ model Wallet{
 model WalletBalance {
   id         String       @id @default(cuid())
   walletId   String
-  currency   String
-  amount     Decimal      @default(0)
+  currency   Currency
+  available Decimal  @default(0)
+  locked    Decimal  @default(0)
   wallet     Wallet       @relation(fields:[walletId],references:[id])
 
   @@unique([walletId,currency])
   @@index([walletId])
 
-
 }
 
+model Trade {
+  id           String   @id @default(cuid())
+  buyOrderId   String
+  sellOrderId  String
+
+  pair         CoinPair
+  price        Decimal
+  quantity     Decimal
+
+  executedAt   DateTime @default(now())
+
+  buyOrder     Order    @relation("BuyTrades", fields:[buyOrderId], references:[id])
+  sellOrder    Order    @relation("SellTrades", fields:[sellOrderId], references:[id])
+
+  @@index([pair, executedAt])
+  @@index([buyOrderId])
+  @@index([sellOrderId])
+}
+
+enum OrderSide {
+  BUY
+  SELL
+}
+
+enum OrderStatus {
+  OPEN
+  PROCESSING
+  CANCELLED
+  FILLED
+  PARTIALLY_FILLED
+}
+
+enum CoinPair {
+  BTC_USDT
+  ETH_USDT
+}
+
+enum Currency {
+  USDT
+  BTC
+  ETH
+}
+
+model Order {
+  id         String    @id @default(cuid())
+  userId     String
+  pair       CoinPair
+  side       OrderSide
+  status     OrderStatus @default(OPEN)
+  price      Decimal
+  quantity   Decimal
+  filledQuantity Decimal @default(0)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User      @relation(fields:[userId], references:[id])
+
+  buyTrades  Trade[]   @relation("BuyTrades")
+  sellTrades Trade[]   @relation("SellTrades")
+  
+  @@index([userId,status])
+  @@index([pair,status,side])
+}
+
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD.svg"
+}
